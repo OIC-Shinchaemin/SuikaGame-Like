@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    //ç≈å„Ç©ÇÁÇQÇ¬ëOÇ‹Ç≈çƒê∂
+    private const int MAXLEVEL = 6;
+
     public Ball currentBall;
 
     [SerializeField]
@@ -14,6 +18,13 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private float _nextBallDelay;
+
+
+    private void Awake()
+    {
+        // FrameSet
+        Application.targetFrameRate = 60;
+    }
 
     void Start()
     {
@@ -30,6 +41,8 @@ public class GameManager : MonoBehaviour
     void GetNextBall()
     {
         currentBall = CreateBall();
+        currentBall.level = UnityEngine.Random.Range(0, MAXLEVEL);
+        currentBall.gameObject.SetActive(true);
 
         StartCoroutine("WaitForNextBall");
     }

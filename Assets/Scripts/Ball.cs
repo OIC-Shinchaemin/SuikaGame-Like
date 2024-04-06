@@ -3,21 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Ball : MonoBehaviour
-{
-    private const float TOP = 8.0f;
+{    
+    private const float TOP = 7.5f;
     private const float WIDTH = 4.0f;
 
     private float _leftBorder, _rightBorder;    
     private Rigidbody2D _rigidbody2D;
-    
+    private Animator _animator;
+
     public bool isDrag;
     [Range(0, 1)]
     [SerializeField]
     private float _speed = 0;
-
+    
+    public int level;
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
+    }
+
+    private void OnEnable()
+    {
+        _animator.SetInteger("Level", level);    
     }
 
     private void Start()
