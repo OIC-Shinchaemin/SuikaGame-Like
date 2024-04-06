@@ -923,6 +923,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cbd0a40e0ec4c2498f0403fdd6e9f46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLevel: 2
   currentBall: {fileID: 0}
   _prefabBall: {fileID: 578652953315886576, guid: 7865d99727f8f2a43bc18c8af0317cf7, type: 3}
   _rootTransform: {fileID: 1410072355}

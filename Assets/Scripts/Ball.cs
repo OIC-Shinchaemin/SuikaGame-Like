@@ -10,10 +10,12 @@ public class Ball : MonoBehaviour
 
     private float _leftBorder, _rightBorder;    
     private Rigidbody2D _rigidbody2D;
+    private CircleCollider2D _circleCollider2D;
     private Animator _animator;
 
     public bool isDrag;
     public bool isMerge;
+    public GameManager manager;
 
     [Range(0, 1)]
     [SerializeField]
@@ -23,6 +25,7 @@ public class Ball : MonoBehaviour
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _circleCollider2D = GetComponent<CircleCollider2D>();
         _animator = GetComponent<Animator>();
     }
 
@@ -77,28 +80,71 @@ public class Ball : MonoBehaviour
             var other = collision.gameObject.GetComponent<Ball>();
             
             if (level == other.level && !isMerge && !other.isMerge && level < MAX_BALL_LEVEL) { 
-                other.Hide();
-                LevelUp();
+                float mx = transform.position.x;
+                float my = transform.position.y;
+                float ox = other.transform.position.x;
+                float oy = other.transform.position.y;
+
+                if (my < oy || (my == oy && mx > ox))
+                {
+                    other.Hide(transform.position);
+                    LevelUp();
+                }
             }
         }
     }
 
-    public void Hide()
+    public void Hide(Vector3 tpos)
     {
         isMerge = true;
-        _rigidbody2D.simulated = false;        
-        StartCoroutine(HideRoutine());
+        
+        _rigidbody2D.simulated = false;
+        _circleCollider2D.enabled = false;
+
+        StartCoroutine(HideRoutine(tpos));
     }
 
-    IEnumerator HideRoutine()
+    IEnumerator HideRoutine(Vector3 tpos)
     {
-        yield return null;
-        gameObject.SetActive(false);
+        // アニメーションみたいに見せるためのカウント
+        int animcnt = 5;
+        while (animcnt > 0) {
+            animcnt--;
+            transform.position = Vector3.Lerp(transform.position, tpos,1.0f);
+            yield return null;
+        }
+
         isMerge = false;
+        //見えないようにする。
+        gameObject.SetActive(false); 
+        //削除する。
+        GameObject.Destroy(gameObject);
+        yield return null;
     }
 
-    public void LevelUp()
+    void LevelUp()
     {
-        _animator.SetInteger("Level", ++level);
+        isMerge = true;
+        // 速度をなくす
+        _rigidbody2D.velocity = Vector2.zero;
+        _rigidbody2D.angularVelocity = 0;
+
+        StartCoroutine(LevelupRoutine());
+    }
+
+    IEnumerator LevelupRoutine()
+    {
+        //yield return new WaitForSeconds(0.05f);
+        yield return null;
+        // LevelUpアニメーションを先に
+        _animator.SetInteger("Level", level + 1);
+        // アニメーションタイミングに合わせる
+        yield return new WaitForSeconds(0.3f);
+        level++;
+
+        // 生成するBallのMaxLevelを変える
+        manager.maxLevel = Mathf.Max(level,manager.maxLevel);
+
+        isMerge = false;
     }
 }
