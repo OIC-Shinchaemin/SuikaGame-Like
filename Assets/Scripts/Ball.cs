@@ -11,6 +11,9 @@ public class Ball : MonoBehaviour
     private Rigidbody2D _rigidbody2D;
     
     public bool isDrag;
+    [Range(0, 1)]
+    [SerializeField]
+    private float _speed = 0;
 
     private void Awake()
     {
@@ -41,15 +44,15 @@ public class Ball : MonoBehaviour
             mousePosition.y = TOP;
             mousePosition.z = 0;
 
-            transform.position = mousePosition;
+            transform.position = Vector3.Lerp(transform.position, mousePosition, _speed);
         }
     }
 
-    public void Drag()
+    public void OnDrag()
     {
         isDrag = true;
     }
-    public void Drop()
+    public void OnDrop()
     {
         isDrag= false;
         // —Ž‚¿‚é‚æ‚¤‚É‚·‚é
