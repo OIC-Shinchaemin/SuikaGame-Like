@@ -6,12 +6,15 @@ public class Ball : MonoBehaviour
 {    
     private const float TOP = 7.5f;
     private const float WIDTH = 4.0f;
+    private const int MAX_BALL_LEVEL = 7;
 
     private float _leftBorder, _rightBorder;    
     private Rigidbody2D _rigidbody2D;
     private Animator _animator;
 
     public bool isDrag;
+    public bool isMerge;
+
     [Range(0, 1)]
     [SerializeField]
     private float _speed = 0;
@@ -65,5 +68,37 @@ public class Ball : MonoBehaviour
         isDrag= false;
         // —Ž‚¿‚é‚æ‚¤‚É‚·‚é
         GetComponent<Rigidbody2D>().simulated = true;
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Ball")
+        {
+            var other = collision.gameObject.GetComponent<Ball>();
+            
+            if (level == other.level && !isMerge && !other.isMerge && level < MAX_BALL_LEVEL) { 
+                other.Hide();
+                LevelUp();
+            }
+        }
+    }
+
+    public void Hide()
+    {
+        isMerge = true;
+        _rigidbody2D.simulated = false;        
+        StartCoroutine(HideRoutine());
+    }
+
+    IEnumerator HideRoutine()
+    {
+        yield return null;
+        gameObject.SetActive(false);
+        isMerge = false;
+    }
+
+    public void LevelUp()
+    {
+        _animator.SetInteger("Level", ++level);
     }
 }

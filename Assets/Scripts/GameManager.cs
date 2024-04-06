@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    //ÅŒã‚©‚ç‚Q‚Â‘O‚Ü‚ÅÄ¶
-    private const int MAXLEVEL = 6;
+    //ÅŒã‚©‚ç‚Q‚Â‘O‚Ü‚ÅÄ¶(0~5)
+    private const int RND_BALL_LEVEL = 6;
 
     public Ball currentBall;
 
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     void GetNextBall()
     {
         currentBall = CreateBall();
-        currentBall.level = UnityEngine.Random.Range(0, MAXLEVEL);
+        currentBall.level = UnityEngine.Random.Range(0, RND_BALL_LEVEL);
         currentBall.gameObject.SetActive(true);
 
         StartCoroutine("WaitForNextBall");
