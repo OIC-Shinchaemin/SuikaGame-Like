@@ -114,6 +114,8 @@ public class Ball : MonoBehaviour
             yield return null;
         }
 
+        manager.score += (int)Mathf.Pow(2, level);
+
         isMerge = false;
         //å©Ç¶Ç»Ç¢ÇÊÇ§Ç…Ç∑ÇÈÅB
         gameObject.SetActive(false); 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,6 +25,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Transform _effectTransform;
 
+    [SerializeField]
+    private Text _scoreText;
+    public int score;
 
     private void Awake()
     {
@@ -30,9 +35,17 @@ public class GameManager : MonoBehaviour
         Application.targetFrameRate = 60;
     }
 
-    void Start()
+    private void Start()
     {
         GetNextBall();
+    }
+
+    private void Update()
+    {
+        if (_scoreText != null)
+        {
+            _scoreText.text = score.ToString();
+        }
     }
 
     //êVÇµÇ¢É{Å[ÉãÇçÏÇÈ
