@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -11,12 +12,16 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private GameObject _prefabBall;
-
     [SerializeField]
     private Transform _rootTransform;
 
     [SerializeField]
     private float _nextBallDelay;
+
+    [SerializeField]
+    private GameObject _prefabEffect;
+    [SerializeField]
+    private Transform _effectTransform;
 
 
     private void Awake()
@@ -35,6 +40,13 @@ public class GameManager : MonoBehaviour
     {
         return Instantiate(_prefabBall, _rootTransform).GetComponent<Ball>();         
     }
+
+    //新しいボールエフェクトを作る
+    public ParticleSystem GetEffect()
+    {
+        return Instantiate(_prefabEffect, _effectTransform).GetComponent<ParticleSystem>();
+    }
+
 
     // 次のボールを取得
     void GetNextBall()

@@ -138,6 +138,12 @@ public class Ball : MonoBehaviour
         yield return null;
         // LevelUpアニメーションを先に
         _animator.SetInteger("Level", level + 1);
+        
+        // エフェクト表示
+        var effect = manager.GetEffect();
+        effect.transform.position = transform.position;
+        effect.Play();
+
         // アニメーションタイミングに合わせる
         yield return new WaitForSeconds(0.3f);
         level++;
